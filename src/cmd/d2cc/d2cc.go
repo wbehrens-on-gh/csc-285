@@ -5,32 +5,48 @@ import (
 	"log"
 )
 
+func binToDec() {
+
+}
+
 func printBanner() {
-	fmt.Print("\033[H\033[2J") // clears the screen
-	fmt.Println("## D$'s 2 Cents Converter ##")
-	fmt.Println("What would you like to do?\n")
-	fmt.Println("1) binary -> decimal")	
-	fmt.Println("2) binary -> hexadecimal")	
-	fmt.Println("3) decimal -> binary")	
-	fmt.Println("4) hexadecimal -> binary")	
-	fmt.Println("5) end")	
+	banner := "\033[H\033[2J" + // Magic sequence to clear screen on Linux
+		"## D$'s 2 Cents Converter ##\n" +
+		"What would you like to do?\n\n" +
+		"1) binary -> decimal\n" +
+		"2) binary -> hexadecimal\n" +
+		"3) decimal -> binary\n" +
+		"4) hexadecimal -> binary\n" +
+		"5) end\n"
+	fmt.Println("%s", banner)
 }
 
 func main() {
-	var cmd int
-	printBanner()
-	fmt.Print(">")
-	_, err := fmt.Scanln(&cmd)
-	
-	if err != nil {
-		log.Fatal(err)
+	for cmd := 0; cmd != 5; {
+		printBanner()
+		fmt.Print(">")
+		_, err := fmt.Scanln(&cmd) 
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			switch cmd {
+			case 1:
+				binToDec()
+			case 2:
+				//binToHex()
+			case 3:
+				//decToBin()	
+			case 4:
+				//hexToBin()	
+			case 5:
+				continue;
+			default:
+				fmt.Printf("Unknown command: %d\n", cmd)
+			}
+		}	
+		
+		// Wait for user input before clearing the screen again
+		fmt.Println("Press enter to continue...")
+		fmt.Scanln()
 	}
-
-	for cmd != 5 {
-		fmt.Scanln(&cmd)
-	}
-	
-
-	//ary := ["binary", "decimal", "hexadecimal"] 
-	//fmt.Printf("Enter a number in %s) ", )
 }
