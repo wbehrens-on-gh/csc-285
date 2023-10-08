@@ -40,7 +40,7 @@ func binToHex(in string) (result string) {
 	// Helpful array for base 10 to 16 conversion
 	hexArr := [16]string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
 
-	// Ensure the input array is always a multiple of 4
+	// Ensure the input array length is always a multiple of 4
 	app_in := strings.Repeat("0", 4-(len(in)%4)) + in 
 	
 	// Iterate through 4 bit sections of the number converting them to base 10 then to base 16
@@ -51,6 +51,10 @@ func binToHex(in string) (result string) {
 	return 
 }
 
+func decToBin(in string) string {
+	return ""
+}
+
 func printBanner() {
 	banner := "\033[H\033[2J" + // Magic sequence to clear screen on Linux
 		"## D$'s 2 Cents Converter ##\n" +
@@ -59,7 +63,8 @@ func printBanner() {
 		"2) binary -> hexadecimal\n" +
 		"3) decimal -> binary\n" +
 		"4) hexadecimal -> binary\n" +
-		"5) end\n"
+		"5) end\n" +
+		"TODO: sanatize input for spaces"
 	fmt.Println("%s", banner)
 }
 
@@ -74,15 +79,17 @@ func main() {
 		} else {
 			switch cmd {
 			case 1:
-				input := getNum("Enter a whole number in binary, do not include spaces\n>")
+				input := getNum("Enter a whole number in 2, do not include spaces\n>")
 				fmt.Println(binToDec(input))
 			case 2:
-				input := getNum("Enter a whole number in binary, do not include spaces\n>")
+				input := getNum("Enter a whole number in 2, do not include spaces\n>")
 				fmt.Println(binToHex(input))
 			case 3:
-				//decToBin()	
+				input := getNum("Enter a whole number in base 10\n>")
+				fmt.Println(decToBin(input))
 			case 4:
-				//hexToBin()	
+				//input := getNum("Enter a whole number in base 16, do not include spaces\n>")
+				//fmt.Println(hexToBin(input))
 			case 5:
 				continue;
 			default:
