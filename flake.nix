@@ -22,7 +22,7 @@
       devShells = forEachSystem (pkgs:
         {
           default = pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [ gh go gopls gotools go-tools ];
+            nativeBuildInputs = with pkgs; [ go gopls gotools go-tools ];
           };
         });
     };
