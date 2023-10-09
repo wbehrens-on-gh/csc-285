@@ -1,3 +1,9 @@
+/*
+ * D$ && tHe Cents
+ * William Behrens, Derek Poston, Alex Marquardt, Sam Garden, Delaney Lentz
+ * October, 2023 Applied Discrete Structures, Fall 2023, Dr. J
+ * Desc: Menu program for converting from base 2->16, base 2->10, base 10->2, base 16->2
+ */
 package main
 
 import (
