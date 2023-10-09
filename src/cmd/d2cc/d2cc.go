@@ -9,7 +9,7 @@ import (
 )
 
 // Helpful array for base 10 to 16 conversion
-var hexArr = map[string]string{
+var binToHexMap = map[string]string{
 	"0000": "0",
 	"0001": "1",
 	"0010": "2",
@@ -26,6 +26,25 @@ var hexArr = map[string]string{
 	"1101": "D",
 	"1110": "E",
 	"1111": "F",
+}
+
+var hexToBinMap = map[string]string{
+	"0": "0000",
+	"1": "0001",
+	"2": "0010",
+	"3": "0011",
+	"4": "0100",
+	"5": "0101",
+	"6": "0110",
+	"7": "0111",
+	"8": "1000",
+	"9": "1001",
+	"A": "1010",
+	"B": "1011",
+	"C": "1100",
+	"D": "1101",
+	"E": "1110",
+	"F": "1111",
 }
 
 // Read number input
@@ -63,13 +82,27 @@ func binToHex(in string) (result string) {
 	// Iterate through 4 bit sections of the number converting them to base 10 then to base 16
 	for i := 0; i < len(app_in); i += 4 {
 		x := app_in[i : i+4]
-		result += hexArr[x]
+		result += binToHexMap[x]
 	}
 	return
 }
 
-func decToBin(in string) string {
-	return ""
+func decToBin(in int) (result string) {
+	for i := in; i/2 >= 0; i/=2 {
+		if i == 0 {
+			break
+		}
+		result += strconv.Itoa(i%2)
+	}
+	result = reverse(result)
+	return 
+}
+
+func hexToBin(in string) (result string) {
+	for _, c := range in {
+		result += hexToBinMap[string(c)]
+	}
+	return
 }
 
 func printBanner() {
@@ -80,8 +113,7 @@ func printBanner() {
 		"2) binary -> hexadecimal\n" +
 		"3) decimal -> binary\n" +
 		"4) hexadecimal -> binary\n" +
-		"5) end\n" +
-		"TODO: sanatize input for spaces"
+		"5) end\n"
 	fmt.Println("%s", banner)
 }
 
@@ -102,11 +134,11 @@ func main() {
 				input := getNum("Enter a whole number in 2, do not include spaces\n>")
 				fmt.Println(binToHex(input))
 			case 3:
-				input := getNum("Enter a whole number in base 10\n>")
+				input, _ := strconv.Atoi(getNum("Enter a whole number in base 10\n>"))
 				fmt.Println(decToBin(input))
 			case 4:
-				//input := getNum("Enter a whole number in base 16, do not include spaces\n>")
-				//fmt.Println(hexToBin(input))
+				input := getNum("Enter a whole number in base 16, do not include spaces\n>")
+				fmt.Println(hexToBin(input))
 			case 5:
 				continue
 			default:
