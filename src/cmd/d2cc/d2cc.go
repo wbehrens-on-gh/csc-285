@@ -8,11 +8,30 @@ import (
 	"strings"
 )
 
+// Helpful array for base 10 to 16 conversion
+var hexArr = map[string]string{
+	"0000": "0",
+	"0001": "1",
+	"0010": "2",
+	"0011": "3",
+	"0100": "4",
+	"0101": "5",
+	"0110": "6",
+	"0111": "7",
+	"1000": "8",
+	"1001": "9",
+	"1010": "A",
+	"1011": "B",
+	"1100": "C",
+	"1101": "D",
+	"1110": "E",
+	"1111": "F",
+}
 
 // Read number input
 func getNum(prompt string) (in string) {
-	fmt.Print(prompt)	
-	_, err := fmt.Scanln(&in);	
+	fmt.Print(prompt)
+	_, err := fmt.Scanln(&in)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,32 +42,30 @@ func getNum(prompt string) (in string) {
 // https://stackoverflow.com/questions/1752414/how-to-reverse-a-string-in-go
 func reverse(s string) (result string) {
 	for _, v := range s {
-    result = string(v) + result
-  }
-  return 
+		result = string(v) + result
+	}
+	return
 }
 
 func binToDec(in string) (result int) {
 	for i, c := range reverse(in) {
-		x, _ := strconv.Atoi(string(c)) // Convert character to integer	
+		x, _ := strconv.Atoi(string(c)) // Convert character to integer
 		result += x * int(math.Pow(2, float64(i)))
 	}
 	return
 }
 
 func binToHex(in string) (result string) {
-	// Helpful array for base 10 to 16 conversion
-	hexArr := [16]string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
+	// Ensure the input array length is always a multiple of 4 
+	//   by padding front of array with 0s.
+	app_in := strings.Repeat("0", 4-(len(in)%4)) + in
 
-	// Ensure the input array length is always a multiple of 4
-	app_in := strings.Repeat("0", 4-(len(in)%4)) + in 
-	
 	// Iterate through 4 bit sections of the number converting them to base 10 then to base 16
-	for i := 0; i < len(app_in); i+=4 {
-		x := app_in[i:i+4]
-		result += hexArr[binToDec(x)]
+	for i := 0; i < len(app_in); i += 4 {
+		x := app_in[i : i+4]
+		result += hexArr[x]
 	}
-	return 
+	return
 }
 
 func decToBin(in string) string {
@@ -72,8 +89,8 @@ func main() {
 	for cmd := 0; cmd != 5; {
 		printBanner()
 		fmt.Print(">")
-		_, err := fmt.Scanln(&cmd) 
-		
+		_, err := fmt.Scanln(&cmd)
+
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -91,12 +108,12 @@ func main() {
 				//input := getNum("Enter a whole number in base 16, do not include spaces\n>")
 				//fmt.Println(hexToBin(input))
 			case 5:
-				continue;
+				continue
 			default:
 				fmt.Printf("Unknown command: %d\n", cmd)
 			}
-		}	
-		
+		}
+
 		// Wait for user input before clearing the screen again
 		fmt.Println("Press enter to continue...")
 		fmt.Scanln()
