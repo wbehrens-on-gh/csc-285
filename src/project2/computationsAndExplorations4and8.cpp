@@ -1,5 +1,15 @@
 /**
+ * William Behrens
  *
+ * Generates a random simple graph as an adjacency matrix then determains if the
+ * graph is connected.
+ *
+ * conditions to be simple:
+ * - Each column in the matrix can have at most n-1 connections
+ * - If a connects to b then b is connected to a
+ * - A simple graph can be connected or disconnected
+ *
+ * source: mathworld.wolfram.com/simplegraph.html
  */
 #include <cstdlib>
 #include <ctime>
@@ -10,14 +20,6 @@
 #define GRAPH std::vector<std::vector<uint>>
 
 using namespace std;
-
-/**
- * - Each column in the matrix can have at most n-1 connections
- * - If a connects to b then b is connected to a
- * - A simple graph can be connected or disconnected
- *
- * source: mathworld.wolfram.com/simplegraph.html
- */
 
 /**
  * A graph will look something like this when printed in a terminal
