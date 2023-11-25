@@ -15,6 +15,17 @@
 
 #include "TreeNode.hpp"
 
+int TreeNode::depth() const {   
+    int ancestors=0;
+    TreeNode* curr = (TreeNode*) this; // This removes const, not good but whatever
+    while(curr) {
+        curr=curr->parent();
+        ancestors++;
+    }
+
+    return ancestors;
+}
+
 std::ostream&
 TreeNode::print(std::ostream& toStream) const
 {
@@ -25,4 +36,12 @@ TreeNode::print(std::ostream& toStream) const
 std::ostream& operator<<(std::ostream& os, const TreeNode& tn)
 {
     return tn.print(os);
+}
+
+bool TreeNode::isLeaf() const {
+    if(!this->left() && !this->right()) {
+        return true;
+    } else {
+        return false;
+    }
 }

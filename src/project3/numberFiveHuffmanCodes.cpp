@@ -33,49 +33,12 @@ char team0[26];
 char team1[26];
 
 
-//code from past project to insert into a tree
-TreeNode* insertHelper(TreeNode* intoSubTree, const string& newNodeVal)
-{
-    if (intoSubTree == nullptr) // if (!intoSubTree)
-    {
-        TreeNode* newRoot = new TreeNode(newNodeVal);
-       
-        return newRoot;
-    }
-
-    // if we get here, we have at least one node in the subtree!
-    if (newNodeVal < intoSubTree->value())
-    {
-        TreeNode* newRoot = insertHelper(intoSubTree->left(), newNodeVal);
-        intoSubTree->left() = newRoot;
-        newRoot->parent() = intoSubTree;
-        
-        return intoSubTree;
-    }
-    else if (intoSubTree->value() < newNodeVal)
-    {
-        TreeNode* newRoot = insertHelper(intoSubTree->right(), newNodeVal);
-        intoSubTree->right() = newRoot;
-        newRoot->parent() = intoSubTree;
-       
-        return intoSubTree;
-    }
-
-    else // not <, not >, so must be ==
-    {
-        
-        return intoSubTree;
-    }
-}
-
-
 void printTable() {//print the freqency table out
 cout << "Letters | Frequency" << endl;
     for(int i = 0; i < 26; i ++) {
         cout << letterAr[i] << " " << freqAr[i] << endl;
     }
 }
-
 
 
 int findLowest() {//finds the lowest frequency to then add to the second lowest, right is represented by 1 left by 0
@@ -95,10 +58,6 @@ int findLowest() {//finds the lowest frequency to then add to the second lowest,
     return index;
 }
 
-void createRoot() {
-
-
-}
 
 void secArr() {
     for(int i = 0; i < size(freqAr); i++) {
@@ -120,7 +79,7 @@ int main(int argc, char *argv[]) {
     //cout << "node Val: " << nodeValue << endl << "string " << val << endl;
     //first make the root node then the others until we get 1 at the root
     TreeNode* root;
-    insertHelper(root, val);
+
 
 
     //now assign the letters to each left or right
