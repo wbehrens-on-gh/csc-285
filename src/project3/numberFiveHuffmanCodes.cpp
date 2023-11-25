@@ -1,0 +1,129 @@
+/**
+ * Applied Discrete Structures Project 3
+ * 
+ * D$ && The Cents
+ * 
+ * Made by Max Hoffman
+ * 
+ * Problem 5 - Huffman Coding
+ * 
+ * 
+*/
+
+//Sources I used 
+// I used this for converting: https://cplusplus.com/reference/string/stod/
+//https://www.w3schools.com/cpp/cpp_arrays_size.asp
+//
+//
+#include "TreeNode.hpp"
+#include <iostream>
+#include <vector>
+#include <tuple>
+
+using namespace std;
+
+
+char letterAr[26] = {'A', 'B','C', 'D','E', 'F', 'G', 'H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+double freqAr[26] = {0.0817, 0.0145,0.0248,0.0431,0.1232, 0.0209, 0.0182, 0.0668, 0.0689, 0.0010, 0.0080, 0.0397, 0.0277, 0.0662,0.0781,0.0156,0.0009,0.0572,0.0628, 0.0905, 0.0304, 0.0102, 0.0264, 0.0015, 0.0211, 0.0005};
+double workArr[26];
+
+//for the 0s and 1s
+char team0[26];
+char team1[26];
+
+
+//code from past project to insert into a tree
+TreeNode* insertHelper(TreeNode* intoSubTree, const string& newNodeVal)
+{
+    if (intoSubTree == nullptr) // if (!intoSubTree)
+    {
+        TreeNode* newRoot = new TreeNode(newNodeVal);
+       
+        return newRoot;
+    }
+
+    // if we get here, we have at least one node in the subtree!
+    if (newNodeVal < intoSubTree->value())
+    {
+        TreeNode* newRoot = insertHelper(intoSubTree->left(), newNodeVal);
+        intoSubTree->left() = newRoot;
+        newRoot->parent() = intoSubTree;
+        
+        return intoSubTree;
+    }
+    else if (intoSubTree->value() < newNodeVal)
+    {
+        TreeNode* newRoot = insertHelper(intoSubTree->right(), newNodeVal);
+        intoSubTree->right() = newRoot;
+        newRoot->parent() = intoSubTree;
+       
+        return intoSubTree;
+    }
+
+    else // not <, not >, so must be ==
+    {
+        
+        return intoSubTree;
+    }
+}
+
+
+void printTable() {//print the freqency table out
+cout << "Letters | Frequency" << endl;
+    for(int i = 0; i < 26; i ++) {
+        cout << letterAr[i] << " " << freqAr[i] << endl;
+    }
+}
+
+
+
+int findLowest() {//finds the lowest frequency to then add to the second lowest, right is represented by 1 left by 0
+    double lowestVal = 100;
+    int index = 0;
+
+    for(int i = 0; i < size(workArr); i++) {
+        if(workArr[i] < lowestVal) {
+            lowestVal = workArr[i];
+            index = i;
+        }
+    }
+    //delete it from the array
+    workArr[index] = 100000;
+
+
+    return index;
+}
+
+void createRoot() {
+
+
+}
+
+void secArr() {
+    for(int i = 0; i < size(freqAr); i++) {
+        workArr[i] = freqAr[i];
+    }
+}
+int main(int argc, char *argv[]) {
+    secArr();
+    
+
+    printTable();
+
+    //find the 2 lowest frequencies in the array then we make the root node based off of that value
+    int index = findLowest();
+    int index2 = findLowest();
+    double nodeValue = freqAr[index] + freqAr[index2];
+    string val = to_string(nodeValue);
+    //cout << "val1 " << freqAr[index] << " val 2 " << freqAr[index2] << endl;
+    //cout << "node Val: " << nodeValue << endl << "string " << val << endl;
+    //first make the root node then the others until we get 1 at the root
+    TreeNode* root;
+    insertHelper(root, val);
+
+
+    //now assign the letters to each left or right
+    
+    
+}
