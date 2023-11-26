@@ -7,6 +7,7 @@
 class Tree {
 public:
   Tree() : _root(nullptr) {}
+
   // locate
   // returns node found
   TreeNode *locate(const std::string &find) const;
@@ -15,6 +16,7 @@ public:
   // normal binary tree insert
   void insert(const std::string &value);
 
+  
   // remove
   // returns node removed
   void remove(const std::string &toDel);
