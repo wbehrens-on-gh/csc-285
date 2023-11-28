@@ -13,7 +13,7 @@
  * 
 */
 
-#include "TreeNode.hpp"
+#include "TreeNodeHuf.hpp"
 
 int TreeNode::depth() const {   
     int ancestors=0;

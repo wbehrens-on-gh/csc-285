@@ -2,7 +2,7 @@
 #define _TREE_HPP_
 #include <iostream>
 
-#include "TreeNode.hpp"
+#include "TreeNodeHuf.hpp"
 
 class Tree {
 public:
@@ -14,8 +14,8 @@ public:
 
   // insert
   // normal binary tree insert
-  void insert(const std::string &value);
 
+  void insertHuf(const std::string &value, const double & val);
   
   // remove
   // returns node removed

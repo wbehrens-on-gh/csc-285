@@ -9,8 +9,8 @@ Made by Will and Max
 */
 
 
-#include "Tree.hpp"
-#include "TreeNode.hpp"
+#include "TreeHuf.hpp"
+#include "TreeNodeHuf.hpp"
 
 using namespace std;
 
@@ -31,32 +31,30 @@ TreeNode* Tree::locate(const std::string &find) const {
 
 
 
-
-
-// intoSubTree -- The subtree we want to insert into
-// new_value -- the new value we want to insert into the subtree
-//
-// returns the update subtree
-TreeNode* insertHelper(TreeNode* intoSubTree, const string& value) {
-    if(!intoSubTree) {
-        return new TreeNode(value);
+TreeNode* insertHelperHuf(TreeNode* intoSubTree, const string& value, const double & val) {
+    if(!intoSubTree) {//if this is the root
+        return new TreeNode(value, val);
     }
+    //not the root check to see if we have a right (since right is smallest) then right
+   
     
-    // if we get here, we have at least one node in our tree.
-    if(value < intoSubTree->value()) {
-        intoSubTree->left() = insertHelper(intoSubTree->left(), value);
+    if(intoSubTree->left() == nullptr) {//the 0
+        intoSubTree->left() = insertHelperHuf(intoSubTree->left(), value, val);
         intoSubTree->left()->parent() = intoSubTree;    
-    } else if(value > intoSubTree->value()) {
-        intoSubTree->right() = insertHelper(intoSubTree->right(), value);    
+    }
+    else if(intoSubTree->right() == nullptr) {//the 1
+        intoSubTree->right() = insertHelperHuf(intoSubTree->right(), value, val);    
         intoSubTree->right()->parent() = intoSubTree;    
     }
 
     return intoSubTree; 
 }
 
-void Tree::insert(const std::string &value) {
-    this->_root = insertHelper(this->_root, value);
+void Tree::insertHuf(const std::string &value, const double & val) {
+     this->_root = insertHelperHuf(this->_root, value, val);
 }
+
+
 
 void Tree::remove(const std::string &toDel) {
     TreeNode* toDelNode = this->locate(toDel);

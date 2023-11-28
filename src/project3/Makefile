@@ -6,6 +6,7 @@ LN=g++
 
 BINS = numberOneAndTwo numberFiveHuffmanCodes 
 TREE_OBJS = Tree.o TreeNode.o
+TREE_OBJS2 = TreeHuf.o TreeNodeHuf.o
 
 default: $(BINS)
 
@@ -21,11 +22,17 @@ numberOneAndTwo.o: numberOneAndTwo.cpp
 #Question 4
 
 # Question 5
-numberFiveHuffmanCodes: numberFiveHuffmanCodes.o $(TREE_OBJS)
-	$(LN) -o numberFiveHuffmanCodes numberFiveHuffmanCodes.o $(TREE_OBJS) 
+numberFiveHuffmanCodes: numberFiveHuffmanCodes.o $(TREE_OBJS2)
+	$(LN) -o numberFiveHuffmanCodes numberFiveHuffmanCodes.o $(TREE_OBJS2) 
 
 numberFiveHuffmanCodes.o: numberFiveHuffmanCodes.cpp
 	$(CXX) numberFiveHuffmanCodes.cpp
+TreeHuf.o: TreeHuf.cpp TreeHuf.hpp
+	$(CXX) TreeHuf.cpp
+
+TreeNodeHuf.o: TreeNodeHuf.cpp TreeNodeHuf.hpp
+	$(CXX) TreeNodeHuf.cpp
+
 
 # DO NOT TOUCH, COMPILES TREE CLASS
 Tree.o: Tree.cpp Tree.hpp
