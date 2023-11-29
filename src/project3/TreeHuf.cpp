@@ -14,12 +14,12 @@ Made by Will and Max
 
 using namespace std;
 
-TreeNode* Tree::locate(const std::string &find) const {
+TreeNode* Tree::locate(const pair<string, double> &find) const {
     TreeNode* curr = this->_root;
     while(curr) {
-        if(find < curr->value()) {
+        if(find.second < curr->value().second) {
             curr = curr->left();
-        } else if (find > curr->value()) {
+        } else if (find.second > curr->value().second) {
             curr = curr->right();
         } else { // equal
             return curr;
@@ -56,12 +56,12 @@ void Tree::insertHuf(const std::string &value, const double & val) {
 
 
 
-void Tree::remove(const std::string &toDel) {
+void Tree::remove(const pair<std::string, double> &toDel) {
     TreeNode* toDelNode = this->locate(toDel);
 
     // Value doesn't exist
     if(!toDelNode) {
-        cerr << "Value `" << toDel << "` was not found so no value was deleted" << endl;
+        cerr << "Value `" << toDel.first << ":" << toDel.second << "` was not found so no value was deleted" << endl;
         return;
     }
 
@@ -133,7 +133,7 @@ void Tree::remove(const std::string &toDel) {
         while(curr->left()) {
             curr = curr->left();
         }
-        string save = curr->value();
+        pair<string, double> save = curr->value();
         this->remove(save); // Recursive call will only be run once
         
         // Don't really "delete", just update the value
