@@ -111,38 +111,48 @@ void print() {
 }
 
 vector<pair<string, double>> doHuf(vector<pair<string, double>> pairV) {
-
     if(pairV.size() == 1 && pairV.at(1).second == 1.0) {//only 1 tree left in the 
         return pairV;
     }
 
-    sort(pairV.rbegin(), pairV.rend(), customSort);
+    sort(pairV.rbegin(), pairV.rend(), customSort);//sort
 
-    // pop off value
-    HUF_LETTER thing = pairV.at(pairV.size()-1);//get the last element of the vector
+    HUF_LETTER lowFreqVal = pairV.at(pairV.size()-1);//get the last element of the vector
     pairV.pop_back();//get rid of it
     
     //add to tree
     Tree newTree;
-    //newTree.insertHuf(thing.first, thing.second);
-    //treeTable.insert(std::pair<string, Tree>(thing.first + to_string(thing.second) ,newTree));//used for how to insert values into a map: https://cplusplus.com/reference/map/map/insert/
-    //inserts into the map a pair of string, Tree the string is the letter and frequency together
-
+ 
     // case 1: value is a single pair
-    if(treeTable.find(thing.first) == treeTable.end()) {
-        // not a tree
-    } else {
-        // tree
-        Tree huf = treeTable[thing.first];
+    if(treeTable.find(lowFreqVal.first) == treeTable.end()) {
+        newTree.insertHuf(lowFreqVal.first, lowFreqVal.second);//make it a tree
+        // TODO: get total freq of all items in tree
+        pairV.push_back({lowFreqVal.first, lowFreqVal.second});//add it back into the pool of frequencies
+        treeTable[lowFreqVal.first] = newTree;//add the new tree to the tree map (treeTable)
+    } else { 
+        // case 2: value is a tree
+       
+        Tree huf = treeTable[lowFreqVal.first];
+        HUF_LETTER seclowFreqVal = pairV.at(pairV.size()-1);
+        pairV.pop_back();//get the second lowest value
+
+        if(treeTable.find(seclowFreqVal.first) == treeTable.end()) {//if the second lowest value in the vector is a tree
+            //new insert method to add a node to a tree
+            //lowFreqVal and seclowFreqVal are both of the "trees"
+
+            
+            
+        }
+        else {//it is not a tree just a pair
+            newTree.insertHuf(seclowFreqVal.first, seclowFreqVal.second);//put the pair into the tree
+        }
+
+        //add the tree back into the vector to then be combined with another tree later
+        pairV.push_back( pair<string, double> (newTree.root()->value().first, newTree.root()->value().second));
+
     }
 
-    // case 2: value is a tree
-
-
-
-
-    // do this after removing lowest freq value, adding new tree, then sorting
-    return doHuf(pairV);
+    return doHuf(pairV);//keep returning the vector 
 }
 
 int main(int argc, char *argv[]) {
@@ -154,72 +164,7 @@ int main(int argc, char *argv[]) {
     sort(ordPairs.rbegin(), ordPairs.rend(), customSort);
     print();
 
-    //treeTable[doHuf(ordPairs).at(0).first];
-
-
-    
-/*
-    printTable();
-    cout << endl << endl;
-    Tree huffmanTree1;
-    
-
-    //first thing to do is sort both the letter and freq vectors  
-    sort(freqV.begin(), freqV.end());
-    printVectorN(freqV);
-
-    sortLetter();
-    printVectorL(ordLetter);
-
-    //sort the letter vector
-
-
-    
-
-    double num1 = ordFreq.at(0);
-    double num2 = ordFreq.at(1);
-    double nodeValue = num1 + num2;
-
-    string val = to_string(nodeValue);
-    //cout << "val1 " << freqAr[index] << " val 2 " << freqAr[index2] << endl;
-    //cout << "node Val: " << nodeValue << endl << "string " << val << endl;
-    //first make the root node then the others until we get 1 at the root
-    TreeNode* root = new TreeNode(val, nodeValue);
-   
-   
-    //insert the root then the 2 other values to make the first "tree"
-    huffmanTree1.insertHuf(root->value(), nodeValue);
-    huffmanTree1.insertHuf(ordLetter[0], ordFreq[0]);
-    huffmanTree1.insertHuf(ordLetter[1], ordFreq[1]);
-
-    cout << "Huffman Tree 1" << endl;
-    huffmanTree1.printPreOrder();
-    //cout << huffmanTree1.root()->left()->value();
-    //cout << " " << huffmanTree1.root()->left()->freq();
-    //delete the two letters that we added together from the letter Array and then add a new letter
-    for(int i = 0; i < 26; i++) {
-        if(letterAr2[i] == ordLetter[0] || letterAr2[i] == ordLetter[1]) {
-            //delete from lists
-            letterAr[i] = "";
-        }
-    }
-    
-   
-    //new tree is identified by the comb of the left and right
-    //add the frequency to the ordered list and delete the children from the frequency list
-    //put in vector
-
-   
-
-    //then add the freq to the ordered list
-    
-    
-    
-    
-    huffmanTree1.printPreOrder();
-*/
-
-
+    treeTable[doHuf(ordPairs).at(0).first];
 
 
 
