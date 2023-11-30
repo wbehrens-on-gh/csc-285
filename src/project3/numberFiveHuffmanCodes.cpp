@@ -153,7 +153,7 @@ vector<pair<string, double>> doHuf(vector<pair<string, double>> pairV) {
             //lowFreq val is the node you are inserting into the seclowval tree 
             TreeNode * toBeInserted = tree1.root();
             //call the node insert method to insert toBeInserted node into tree2 
-            tree2.insertNodeHuf(toBeInserted);
+            //tree2.insertNodeHuf(toBeInserted);
 
 
             //then remove tree2 from the map (remove the tree we added to the other tree)
