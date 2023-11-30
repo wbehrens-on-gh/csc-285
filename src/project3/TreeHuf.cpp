@@ -29,39 +29,50 @@ TreeNode* Tree::locate(const pair<string, double> &find) const {
     return nullptr;
 }
 
-
-
-
 //methods to add a node to an existing tree, used to connect trees together
-void Tree::insertNodeHuf(const TreeNode * &nodeToAdd) {
-     this->_root = insertNodeHufHelper(this->_root);
+void Tree::insertNodeHuf(TreeNode* & rootOfTreeToAdd) {
+    TreeNode* curr = this->_root;
+    while(curr->left()) {
+        
+        curr = curr->left();
+        
+    }
+    //curr is leftmost node
+
+    //add the trees together by setting the pointers together
+    rootOfTreeToAdd->parent() = curr;
+    curr->left() = rootOfTreeToAdd;
 }
-
-
-TreeNode * insertNodeHufHelper(TreeNode* & nodeToAdd) {//nodeToAdd is the 
-    //all we need to do is take the nodeToAdd which will be the lesser of the trees ( this and nodeToAdd)
-    
-
-}
-
 
 TreeNode* insertHelperHuf(TreeNode* intoSubTree, const string& value, const double & val) {
-    if(!intoSubTree) {//if this is the root
+   if (intoSubTree == nullptr) // if (!intoSubTree)
+    {  
         return new TreeNode(value, val);
     }
-    //not the root check to see if we have a right (since right is smallest) then right
-   
-    
-    if(intoSubTree->left() == nullptr) {//the 0
-        intoSubTree->left() = insertHelperHuf(intoSubTree->left(), value, val);
-        intoSubTree->left()->parent() = intoSubTree;    
+
+    // if we get here, we have at least one node in the subtree!
+    if (val < intoSubTree->value().second)
+    {
+        TreeNode* newRoot = insertHelperHuf(intoSubTree->left(), value, val);
+        intoSubTree->left() = newRoot;
+        newRoot->parent() = intoSubTree;
+        
+        return intoSubTree;
     }
-    else if(intoSubTree->right() == nullptr) {//the 1
-        intoSubTree->right() = insertHelperHuf(intoSubTree->right(), value, val);    
-        intoSubTree->right()->parent() = intoSubTree;    
+    else if (intoSubTree->value().second < val)
+    {
+        TreeNode* newRoot = insertHelperHuf(intoSubTree->right(), value, val);
+        intoSubTree->right() = newRoot;
+        newRoot->parent() = intoSubTree;
+       
+        return intoSubTree;
     }
 
-    return intoSubTree; 
+    else // not <, not >, so must be ==
+    {
+        
+        return intoSubTree;
+    }
 }
 
 void Tree::insertHuf(const std::string &value, const double & val) {

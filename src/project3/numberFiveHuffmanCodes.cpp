@@ -13,38 +13,24 @@
 //Sources I used 
 // I used this for converting: https://cplusplus.com/reference/string/stod/
 //https://www.w3schools.com/cpp/cpp_arrays_size.asp
-//
-//
 #include "TreeNodeHuf.hpp"
 #include "TreeHuf.hpp"
+
+//https://cplusplus.com/reference/algorithm/sort/
+#include <algorithm>//found there is a sort method in this library after trying to do it manually figured out it already existed!! : 
+#include <numeric>
+
+#include <map>
 #include <iostream>
 #include <vector>
 
-
-#include <algorithm>//found there is a sort method in this library after trying to do it manually figured out it already existed!! : 
-//https://cplusplus.com/reference/algorithm/sort/
-
-
-#include <numeric>
-#include <iterator>
-#include <map>
-
 using namespace std;
 
-
-
-//unsorted arrays
-//std::vector<string> letterV = {"A", "B","C", "D","E", "F", "G", "H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-//std::vector<string> origLV = letterV;
-
-//starts as unsorted but then gets sorted and used 
-//std::vector<double> freqV = {0.0817, 0.0145,0.0248,0.0431,0.1232, 0.0209, 0.0182, 0.0668, 0.0689, 0.0010, 0.0080, 0.0397, 0.0277, 0.0662,0.0781,0.0156,0.0009,0.0572,0.0628, 0.0905, 0.0304, 0.0102, 0.0264, 0.0015, 0.0211, 0.0005};
-//std::vector<double> origFV = freqV;
-//std::map<string, double> pairData;
-
+// Alias for letter+freq
+#define HUF_LETTER pair<string, double>
 
 //vector of the pairs of frequency and letter
-std::vector<std::pair<string, double>> ordPairs = {
+vector<HUF_LETTER> ordPairs = {
     {"A", 0.0817},
     {"B", 0.0145},
     {"C", 0.0248},
@@ -74,98 +60,70 @@ std::vector<std::pair<string, double>> ordPairs = {
 };
 
 //map of every tree created in the recursive method
-std::map<string/*id*/, Tree/*the tree*/> treeTable;
+map<string /*id*/, Tree /*the tree pointer*/> treeTable;
+
 
 //makes a custom data structure to sort the vector of pairs all credit goes to will on this
-struct  {
-    #define HUF_LETTER pair<string, double>
+struct {
     bool operator()(HUF_LETTER  a, HUF_LETTER b) const { return a.second < b.second;}
 } customSort;
 
-void printTable() {//print the freqency table out
-cout << "Letters | Frequency" << endl;
-    for(int i = 0; i < 26; i ++) {
-        cout << ordPairs.at(i).first << ":" << ordPairs.at(i).second << endl;
-    }
-}
-
-
-
-void printVectorL(vector<string> letterV) {
-       cout << "Ord Letters " << endl;
-    for(int i = 0; i < letterV.size(); i++) {
-        cout << letterV.at(i) << endl;
-    }
-}
-void printVectorN(vector<double> numV) {
-    cout << "Ord Nums " << endl;
-    for(int i = 0; i < numV.size(); i++) {
-        cout << numV.at(i) << endl;
-    }
-}
-void print() {
-    //for(int i = 0; i < pairData.size(); i++) {
-    for(auto val : ordPairs) {
-        cout << val.first << ":"<< val.second << endl;
-    }
-}
-
-vector<pair<string, double>> doHuf(vector<pair<string, double>> pairV) {
-    if(pairV.size() == 1 && pairV.at(1).second == 1.0) {//only 1 tree left in the 
+vector<HUF_LETTER> doHuf(vector<pair<string, double>> pairV) {
+    //&& pairV.at(1).second == 1.0
+    if(pairV.size() == 1) { 
+        // only 1 tree left in the 
         return pairV;
     }
-
-    sort(pairV.rbegin(), pairV.rend(), customSort);//sort
-
-    HUF_LETTER lowFreqVal = pairV.at(pairV.size()-1);//get the last element of the vector
-    pairV.pop_back();//get rid of it
     
-    //add to tree
-    Tree newTree;
- 
+    std::sort(pairV.rbegin(), pairV.rend(), customSort);
+
+    HUF_LETTER lowFreqVal = pairV.at(pairV.size()-1); // get the last element of the vector
+    pairV.pop_back(); // get rid of it
+     
     // case 1: value is a single pair
     if(treeTable.find(lowFreqVal.first) == treeTable.end()) {
-        newTree.insertHuf(lowFreqVal.first, lowFreqVal.second);//make it a tree
-        // TODO: get total freq of all items in tree
-        pairV.push_back({lowFreqVal.first, lowFreqVal.second});//add it back into the pool of frequencies
-        treeTable[lowFreqVal.first] = newTree;//add the new tree to the tree map (treeTable)
+        // add to tree
+        Tree newTree;
+
+        // value isn't a tree 
+        newTree.insertHuf(lowFreqVal.first, lowFreqVal.second); // make it a tree
+        
+        pairV.push_back({lowFreqVal.first, lowFreqVal.second}); // add it back into the pool of frequencies
+        treeTable[lowFreqVal.first] = newTree; // add the new tree to the tree map (treeTable)
     } else { 
         // case 2: value is a tree
-       
-        Tree huf = treeTable[lowFreqVal.first];
-        HUF_LETTER seclowFreqVal = pairV.at(pairV.size()-1);
-        pairV.pop_back();//get the second lowest value
+        Tree tree1 = treeTable[lowFreqVal.first];
+        
+        // get the second lowest value
+        HUF_LETTER secLowFreqVal = pairV.at(pairV.size()-1);
+        pairV.pop_back(); // get the second lowest value
 
-        if(treeTable.find(seclowFreqVal.first) == treeTable.end()) {//if the second lowest value in the vector is a tree
-            //new insert method to add a node to a tree
-            //lowFreqVal and seclowFreqVal are both of the values
+        // if the second lowest value in the vector is a tree
+        if(treeTable.find(secLowFreqVal.first) != treeTable.end()) { 
+            // assign tree variables to the 2 lowest values and get the roots of the trees to then be used to add them togethe
+            Tree tree2 = treeTable[secLowFreqVal.first];
             
-            
-            //first find the trees store in iterators
-            std::map<string, Tree>::iterator treeIterator = treeTable.find(seclowFreqVal.first);
-            std::map<string, Tree>::iterator treeIterator2 = treeTable.find(lowFreqVal.first);
+            // lowFreq val is the node you are inserting into the seclowval tree 
+            TreeNode* toBeInserted = tree1.root();
+            // call the node insert method to insert toBeInserted node into tree2 
+            tree2.insertNodeHuf(toBeInserted);
 
+            // then remove tree2 from the map (remove the tree we added to the other tree)
+            if(treeTable.size() > 1) {
+                treeTable.erase(tree2.root()->value().first);
+            }
 
-            //assign tree variables to the 2 lowest values and get the roots of the trees to then be used to add them togethe
-
-            Tree tree1 = treeTable.at(lowFreqVal.first);
-            Tree tree2 = treeTable.at(seclowFreqVal.first);
-            //lowFreq val is the node you are inserting into the seclowval tree 
-            TreeNode * toBeInserted = tree1.root();
-            //call the node insert method to insert toBeInserted node into tree2 
-            //tree2.insertNodeHuf(toBeInserted);
-
-
-            //then remove tree2 from the map (remove the tree we added to the other tree)
-            treeTable.erase(tree2.root()->value().first);
+            // tree1 will be added back but technically it's tree2
+            tree1 = tree2;
+        } else { // it is not a tree just a pair
+            tree1.insertHuf(secLowFreqVal.first, secLowFreqVal.second);//put the pair into the tree
         }
-        else {//it is not a tree just a pair
-            newTree.insertHuf(seclowFreqVal.first, seclowFreqVal.second);//put the pair into the tree
-        }
-
-        //add the tree back into the vector to then be combined with another tree later
-        pairV.push_back( pair<string, double> (newTree.root()->value().first, newTree.root()->value().second));
-
+        
+        // Update tree in table
+        treeTable[lowFreqVal.first] = tree1;
+        
+        // add the tree back into the vector to then be combined with another tree later
+        pairV.push_back({tree1.root()->value().first, tree1.root()->value().second});
     }
 
     return doHuf(pairV);//keep returning the vector 
@@ -173,19 +131,30 @@ vector<pair<string, double>> doHuf(vector<pair<string, double>> pairV) {
 
 
 int main(int argc, char *argv[]) {
-    printTable();
+    std::sort(ordPairs.rbegin(), ordPairs.rend(), customSort);
+    cout << "vector after sort: " << endl;
+    for(auto val : ordPairs) {
+        cout << val.first << ":" << val.second << endl;
+    }
 
+    Tree hufTree = treeTable[doHuf(ordPairs).at(0).first];
+    cout << "trees:" << endl;
+    /*
+    for (auto v : treeTable) {
+        cout << v.first << ":" << v.second << endl;
+        if(v.second) {
+            if(v.second.root()) {
+                cout << v.second->root()->value().first << endl;
+            }
+        }
+    } 
+    */
+    hufTree.printInOrder();
+
+    cout << "after doHuf: " << endl;
+    for(auto val : ordPairs) {
+        cout << val.first << ":" << val.second << endl;
+    }
     
-
-    cout << endl;
-    sort(ordPairs.rbegin(), ordPairs.rend(), customSort);
-    print();
-
-   treeTable[doHuf(ordPairs).at(0).first];
-
-
-
-  
-    
-    
+    return 0;   
 }
