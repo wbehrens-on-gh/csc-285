@@ -14,9 +14,12 @@ public:
 
   // insert
   // normal binary tree insert
-void insertHuf(const std::string &value, const double &freq);
- void insertNodeHuf(TreeNode* & rootOfTreeToAdd);
+  void insertHuf(const std::string &value, const double &freq);
+  void insertNodeHuf(TreeNode* & rootOfTreeToAdd, double totalFreq);
   
+  //add frequencies up
+  double getFreq();
+
   // remove
   // returns node removed
   void remove(const std::pair<std::string, double> &toDel);

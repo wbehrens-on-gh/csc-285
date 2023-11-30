@@ -29,19 +29,60 @@ TreeNode* Tree::locate(const pair<string, double> &find) const {
     return nullptr;
 }
 
-//methods to add a node to an existing tree, used to connect trees together
-void Tree::insertNodeHuf(TreeNode* & rootOfTreeToAdd) {
-    TreeNode* curr = this->_root;
-    while(curr->left()) {
-        
-        curr = curr->left();
-        
+double getFreqHelper(TreeNode* curr, double someVal) {
+    if(!curr) {
+        return someVal;
     }
-    //curr is leftmost node
+    
+    getFreqHelper(curr->left(), someVal);
+    someVal += curr->value().second;
+    getFreqHelper(curr->right(), someVal);
+    //cout << someVal << endl;
+}
+
+double Tree::getFreq() {
+    // in order traverse, like print
+    // instead of cout add value to some variable that will be returned
+    return getFreqHelper(this->root(), 0); //this->root()->value().second);
+}
+TreeNode * insertNodeHufHelper(TreeNode* curr, TreeNode* toInsert, double totalFreq) {
+    /*
+    * traverse tree
+    * insert toInsert node
+    */
+    if (curr == nullptr) {  
+        return toInsert; // new TreeNode(value, val);
+    }
+
+    // if we get here, we have at least one node in the subtree!
+    if (totalFreq < curr->value().second)
+    {
+        TreeNode* newRoot = insertNodeHufHelper(curr->left(), toInsert, totalFreq);
+        curr->left() = newRoot;
+        newRoot->parent() = curr;
+        
+        return curr;
+    }
+    else if (curr->value().second < totalFreq)
+    {
+        TreeNode* newRoot = insertNodeHufHelper(curr->right(), toInsert, totalFreq);
+        curr->right() = newRoot;
+        newRoot->parent() = curr;
+       
+        return curr;
+    } else { // not <, not >, so must be ==
+        
+        return curr;
+    }
+}
+//methods to add a node to an existing tree, used to connect trees together
+void Tree::insertNodeHuf(TreeNode* & rootOfTreeToAdd, double totalFreq) {
+    TreeNode* curr = this->_root;
+    curr = insertNodeHufHelper(curr, rootOfTreeToAdd, totalFreq); 
 
     //add the trees together by setting the pointers together
-    rootOfTreeToAdd->parent() = curr;
-    curr->left() = rootOfTreeToAdd;
+    //rootOfTreeToAdd->parent() = curr;
+    //curr->left() = rootOfTreeToAdd;
 }
 
 TreeNode* insertHelperHuf(TreeNode* intoSubTree, const string& value, const double & val) {

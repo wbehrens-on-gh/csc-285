@@ -56,7 +56,7 @@ vector<HUF_LETTER> ordPairs = {
     {"W", 0.0264},
     {"X", 0.0015},
     {"Y", 0.0211},
-    {"Z", 0.0005}
+    {"Z", 0.0006}
 };
 
 //map of every tree created in the recursive method
@@ -106,7 +106,9 @@ vector<HUF_LETTER> doHuf(vector<pair<string, double>> pairV) {
             // lowFreq val is the node you are inserting into the seclowval tree 
             TreeNode* toBeInserted = tree1.root();
             // call the node insert method to insert toBeInserted node into tree2 
-            tree2.insertNodeHuf(toBeInserted);
+            
+            double totalFreq = tree1.getFreq();
+            tree2.insertNodeHuf(toBeInserted, totalFreq);
 
             // then remove tree2 from the map (remove the tree we added to the other tree)
             if(treeTable.size() > 1) {
@@ -123,8 +125,13 @@ vector<HUF_LETTER> doHuf(vector<pair<string, double>> pairV) {
         treeTable[lowFreqVal.first] = tree1;
         
         // add the tree back into the vector to then be combined with another tree later
+    
+
+        
         pairV.push_back({tree1.root()->value().first, tree1.root()->value().second});
+    
     }
+   
 
     return doHuf(pairV);//keep returning the vector 
 }
@@ -150,11 +157,25 @@ int main(int argc, char *argv[]) {
     } 
     */
     hufTree.printInOrder();
-
+    
     cout << "after doHuf: " << endl;
     for(auto val : ordPairs) {
         cout << val.first << ":" << val.second << endl;
     }
-    
-    return 0;   
+
+    // Set root of tree to non-letter value and set the freq    
+    TreeNode* val = new TreeNode("root", hufTree.getFreq());
+    val->right() = hufTree.root();
+    val->left() = hufTree.root()->left();
+    hufTree.root() = val;
+
+    cout << "VALUE : " << hufTree.root()->value().second << endl;
+    cout << "new tree :" << endl;
+    hufTree.printInOrder();
+
+    for(TreeNode* curr = hufTree.root(); curr; curr = curr->right()) {
+        cout << *curr << endl;
+    }
+
+    return 0;
 }
