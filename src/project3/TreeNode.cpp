@@ -1,10 +1,10 @@
-#include "numberOneandTwoTreeNode.hpp"
+#include "TreeNode.hpp"
 
 int
-IntBinaryTreeNode::depth() const
+CharBinaryTreeNode::depth() const
 {
     int numAncestors=0;
-    IntBinaryTreeNode *parentPtr = _parent;
+    CharBinaryTreeNode *parentPtr = _parent;
 
     while(parentPtr!=nullptr)
     {
@@ -16,7 +16,7 @@ IntBinaryTreeNode::depth() const
 }
 
 std::ostream&
-IntBinaryTreeNode::print(std::ostream &toStream) const
+CharBinaryTreeNode::print(std::ostream &toStream) const
 {
     toStream << _data;
     return toStream;

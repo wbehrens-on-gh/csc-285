@@ -14,8 +14,10 @@ default: $(BINS)
 numberOneAndTwo: numberOneAndTwo.o $(TREE_OBJS)
 	$(LN) -o numberOneAndTwo numberOneAndTwo.o $(TREE_OBJS) 
 
-numberOneAndTwo.o: numberOneAndTwo.cpp
+numberOneAndTwo.o: numberOneAndTwo.cpp Tree.hpp TreeNode.hpp
 	$(CXX) numberOneAndTwo.cpp
+
+
 
 #Question 3
 
