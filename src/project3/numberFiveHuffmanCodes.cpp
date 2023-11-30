@@ -26,7 +26,7 @@
 
 
 #include <numeric>
-
+#include <iterator>
 #include <map>
 
 using namespace std;
@@ -138,10 +138,26 @@ vector<pair<string, double>> doHuf(vector<pair<string, double>> pairV) {
 
         if(treeTable.find(seclowFreqVal.first) == treeTable.end()) {//if the second lowest value in the vector is a tree
             //new insert method to add a node to a tree
-            //lowFreqVal and seclowFreqVal are both of the "trees"
+            //lowFreqVal and seclowFreqVal are both of the values
+            
+            
+            //first find the trees store in iterators
+            std::map<string, Tree>::iterator treeIterator = treeTable.find(seclowFreqVal.first);
+            std::map<string, Tree>::iterator treeIterator2 = treeTable.find(lowFreqVal.first);
 
-            
-            
+
+            //assign tree variables to the 2 lowest values and get the roots of the trees to then be used to add them togethe
+
+            Tree tree1 = treeTable.at(lowFreqVal.first);
+            Tree tree2 = treeTable.at(seclowFreqVal.first);
+            //lowFreq val is the node you are inserting into the seclowval tree 
+            TreeNode * toBeInserted = tree1.root();
+            //call the node insert method to insert toBeInserted node into tree2 
+            tree2.insertNodeHuf(toBeInserted);
+
+
+            //then remove tree2 from the map (remove the tree we added to the other tree)
+            treeTable.erase(tree2.root()->value().first);
         }
         else {//it is not a tree just a pair
             newTree.insertHuf(seclowFreqVal.first, seclowFreqVal.second);//put the pair into the tree
@@ -155,6 +171,7 @@ vector<pair<string, double>> doHuf(vector<pair<string, double>> pairV) {
     return doHuf(pairV);//keep returning the vector 
 }
 
+
 int main(int argc, char *argv[]) {
     printTable();
 
@@ -164,7 +181,7 @@ int main(int argc, char *argv[]) {
     sort(ordPairs.rbegin(), ordPairs.rend(), customSort);
     print();
 
-    treeTable[doHuf(ordPairs).at(0).first];
+   treeTable[doHuf(ordPairs).at(0).first];
 
 
 

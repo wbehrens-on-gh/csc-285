@@ -31,6 +31,20 @@ TreeNode* Tree::locate(const pair<string, double> &find) const {
 
 
 
+
+//methods to add a node to an existing tree, used to connect trees together
+void Tree::insertNodeHuf(const TreeNode * &nodeToAdd) {
+     this->_root = insertNodeHufHelper(this->_root);
+}
+
+
+TreeNode * insertNodeHufHelper(TreeNode* & nodeToAdd) {//nodeToAdd is the 
+    //all we need to do is take the nodeToAdd which will be the lesser of the trees ( this and nodeToAdd)
+    
+
+}
+
+
 TreeNode* insertHelperHuf(TreeNode* intoSubTree, const string& value, const double & val) {
     if(!intoSubTree) {//if this is the root
         return new TreeNode(value, val);
