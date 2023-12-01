@@ -29,7 +29,7 @@ int TreeNode::depth() const {
 std::ostream&
 TreeNode::print(std::ostream& toStream) const
 {
-    toStream << _nodeValue;
+    toStream << (std::string) _nodeValue.first << (std::string) ":" << std::to_string(_nodeValue.second);
     return toStream;
 }
 

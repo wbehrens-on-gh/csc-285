@@ -10,16 +10,19 @@ public:
 
   // locate
   // returns node found
-  TreeNode *locate(const std::string &find) const;
+  TreeNode *locate(const std::pair<std::string, double> &find) const;
 
   // insert
   // normal binary tree insert
-
-  void insertHuf(const std::string &value, const double & val);
+  void insertHuf(const std::string &value, const double &freq);
+  void insertNodeHuf(TreeNode* & rootOfTreeToAdd, double totalFreq);
   
+  //add frequencies up
+  double getFreq();
+
   // remove
   // returns node removed
-  void remove(const std::string &toDel);
+  void remove(const std::pair<std::string, double> &toDel);
 
   // print (in-order, pre-order, post-order)
   void printPreOrder();
@@ -29,6 +32,8 @@ public:
   // get root
   const TreeNode *root() const { return this->_root; }
   TreeNode *&root() { return this->_root; }
+
+
 
 private:
   TreeNode *_root;

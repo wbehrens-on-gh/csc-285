@@ -14,12 +14,12 @@ Made by Will and Max
 
 using namespace std;
 
-TreeNode* Tree::locate(const std::string &find) const {
+TreeNode* Tree::locate(const pair<string, double> &find) const {
     TreeNode* curr = this->_root;
     while(curr) {
-        if(find < curr->value()) {
+        if(find.second < curr->value().second) {
             curr = curr->left();
-        } else if (find > curr->value()) {
+        } else if (find.second > curr->value().second) {
             curr = curr->right();
         } else { // equal
             return curr;
@@ -29,25 +29,91 @@ TreeNode* Tree::locate(const std::string &find) const {
     return nullptr;
 }
 
+double getFreqHelper(TreeNode* curr, double someVal) {
+    if(!curr) {
+        return someVal;
+    }
+    
+    getFreqHelper(curr->left(), someVal);
+    someVal += curr->value().second;
+    getFreqHelper(curr->right(), someVal);
+    //cout << someVal << endl;
+}
 
+double Tree::getFreq() {
+    // in order traverse, like print
+    // instead of cout add value to some variable that will be returned
+    return getFreqHelper(this->root(), 0); //this->root()->value().second);
+}
+TreeNode * insertNodeHufHelper(TreeNode* curr, TreeNode* toInsert, double totalFreq) {
+    /*
+    * traverse tree
+    * insert toInsert node
+    */
+    if (curr == nullptr) {  
+        return toInsert; // new TreeNode(value, val);
+    }
+
+    // if we get here, we have at least one node in the subtree!
+    if (totalFreq < curr->value().second)
+    {
+        TreeNode* newRoot = insertNodeHufHelper(curr->left(), toInsert, totalFreq);
+        curr->left() = newRoot;
+        newRoot->parent() = curr;
+        
+        return curr;
+    }
+    else if (curr->value().second < totalFreq)
+    {
+        TreeNode* newRoot = insertNodeHufHelper(curr->right(), toInsert, totalFreq);
+        curr->right() = newRoot;
+        newRoot->parent() = curr;
+       
+        return curr;
+    } else { // not <, not >, so must be ==
+        
+        return curr;
+    }
+}
+//methods to add a node to an existing tree, used to connect trees together
+void Tree::insertNodeHuf(TreeNode* & rootOfTreeToAdd, double totalFreq) {
+    TreeNode* curr = this->_root;
+    curr = insertNodeHufHelper(curr, rootOfTreeToAdd, totalFreq); 
+
+    //add the trees together by setting the pointers together
+    //rootOfTreeToAdd->parent() = curr;
+    //curr->left() = rootOfTreeToAdd;
+}
 
 TreeNode* insertHelperHuf(TreeNode* intoSubTree, const string& value, const double & val) {
-    if(!intoSubTree) {//if this is the root
+   if (intoSubTree == nullptr) // if (!intoSubTree)
+    {  
         return new TreeNode(value, val);
     }
-    //not the root check to see if we have a right (since right is smallest) then right
-   
-    
-    if(intoSubTree->left() == nullptr) {//the 0
-        intoSubTree->left() = insertHelperHuf(intoSubTree->left(), value, val);
-        intoSubTree->left()->parent() = intoSubTree;    
+
+    // if we get here, we have at least one node in the subtree!
+    if (val < intoSubTree->value().second)
+    {
+        TreeNode* newRoot = insertHelperHuf(intoSubTree->left(), value, val);
+        intoSubTree->left() = newRoot;
+        newRoot->parent() = intoSubTree;
+        
+        return intoSubTree;
     }
-    else if(intoSubTree->right() == nullptr) {//the 1
-        intoSubTree->right() = insertHelperHuf(intoSubTree->right(), value, val);    
-        intoSubTree->right()->parent() = intoSubTree;    
+    else if (intoSubTree->value().second < val)
+    {
+        TreeNode* newRoot = insertHelperHuf(intoSubTree->right(), value, val);
+        intoSubTree->right() = newRoot;
+        newRoot->parent() = intoSubTree;
+       
+        return intoSubTree;
     }
 
-    return intoSubTree; 
+    else // not <, not >, so must be ==
+    {
+        
+        return intoSubTree;
+    }
 }
 
 void Tree::insertHuf(const std::string &value, const double & val) {
@@ -56,12 +122,12 @@ void Tree::insertHuf(const std::string &value, const double & val) {
 
 
 
-void Tree::remove(const std::string &toDel) {
+void Tree::remove(const pair<std::string, double> &toDel) {
     TreeNode* toDelNode = this->locate(toDel);
 
     // Value doesn't exist
     if(!toDelNode) {
-        cerr << "Value `" << toDel << "` was not found so no value was deleted" << endl;
+        cerr << "Value `" << toDel.first << ":" << toDel.second << "` was not found so no value was deleted" << endl;
         return;
     }
 
@@ -133,7 +199,7 @@ void Tree::remove(const std::string &toDel) {
         while(curr->left()) {
             curr = curr->left();
         }
-        string save = curr->value();
+        pair<string, double> save = curr->value();
         this->remove(save); // Recursive call will only be run once
         
         // Don't really "delete", just update the value

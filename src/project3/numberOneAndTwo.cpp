@@ -26,18 +26,30 @@ int main(int argc, char *argv[])
     }
 
     myTree.print(cout);
-    /*
-    int delVal;
-    cout << "Enter a value to delete (0 to stop): ";
+
+    char addVal;
+    cout << "Enter a character to insert (+ to stop): ";
+    cin >> addVal;
+    while(addVal!='+')
+    {
+        myTree.insert(addVal);
+        myTree.print(cout);
+
+        cout << "Enter a character to insert (+ to stop): ";
+        cin >> addVal;
+    }
+
+    char delVal;
+    cout << "Enter a character to delete (+ to stop): ";
     cin >> delVal;
-    while(delVal!=0)
+    while(delVal!='+')
     {
         myTree.remove(delVal);
         myTree.print(cout);
 
-        cout << "Enter a value to delete (0 to stop): ";
+        cout << "Enter a character to delete (+ to stop): ";
         cin >> delVal;
     }
-    */
+
     return 0;
 }
