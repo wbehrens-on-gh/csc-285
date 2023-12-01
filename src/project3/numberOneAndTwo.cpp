@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 
     myTree.print(cout);
 
+    //add a character to tree
     char addVal;
     cout << "Enter a character to insert (+ to stop): ";
     cin >> addVal;
@@ -39,6 +40,7 @@ int main(int argc, char *argv[])
         cin >> addVal;
     }
 
+    //removes a character from the tree
     char delVal;
     cout << "Enter a character to delete (+ to stop): ";
     cin >> delVal;
